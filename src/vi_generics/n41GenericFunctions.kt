@@ -1,5 +1,6 @@
 package vi_generics
 
+import com.google.common.collect.ImmutableList
 import util.TODO
 import java.util.*
 
@@ -19,12 +20,24 @@ fun task41(): Nothing = TODO(
         }
 )
 
+fun <T, C : MutableCollection<T>> Iterable<T>.partitionTo(
+        list1: C,
+        list2: C,
+        predicate: (s: T) -> Boolean
+) : Pair<C, C> {
+    var result: Pair<C, C> = Pair(list1, list2)
+
+    for(s in this) {
+        (if(predicate(s)) result.first else result.second).add(s)
+    }
+
+    return result
+}
+
 fun List<String>.partitionWordsAndLines(): Pair<List<String>, List<String>> {
-    task41()
-//    return partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(" ") }
+    return partitionTo(ArrayList<String>(), ArrayList()) { s -> !s.contains(" ") }
 }
 
 fun Set<Char>.partitionLettersAndOtherSymbols(): Pair<Set<Char>, Set<Char>> {
-    task41()
-//    return partitionTo(HashSet<Char>(), HashSet()) { c -> c in 'a'..'z' || c in 'A'..'Z'}
+    return partitionTo(HashSet<Char>(), HashSet()) { c -> c in 'a'..'z' || c in 'A'..'Z'}
 }
